@@ -1,0 +1,7 @@
+- name: Set up Certificate Authorirty
+  hosts: ca_host
+  vars_files:
+    - vars.yml
+  tasks:
+    - debug:
+        msg: "Hello World"

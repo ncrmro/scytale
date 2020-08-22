@@ -1,0 +1,4 @@
+[ca_host]
+localhost ansible_connection=local
+
+[ca_cert_installs]
