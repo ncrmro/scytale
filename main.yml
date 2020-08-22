@@ -1,7 +1,6 @@
-- name: Set up Certificate Authorirty
+- name: Set up Certificate Authority
   hosts: ca_host
   vars_files:
     - vars.yml
-  tasks:
-    - debug:
-        msg: "Hello World"
+  roles:
+    - certificate_authority
