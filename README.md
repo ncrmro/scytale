@@ -24,6 +24,17 @@ to the vault making sure they are available for later plays from the vault and n
 - private key generation
 - certificate generation
 
+What typically should happen is any downstream services should b
+
+### Renewal/Deployment of new certificates and keys.
+
+Some services require a limit on certificate validity. Chrome and Safari usually limit this to about 365 days, Letsencrypt
+certs are valid for and renew per month.
+
+When we renew or add new certificates downstream services can be notified use a webhook.
+
+When using a different Ansible project you can have it trigger a handler if any of the certificates or keys change. 
+
 ## Keys
 
 While certificates should be thought as semi ephemeral (more info in [Renewal](#renewal)) keys should not change and
@@ -32,11 +43,6 @@ for us to check these into the [Ansible Vault](https://docs.ansible.com/ansible/
 recovery and multiple developer machines.
 
 ## Certificates
-
-### Renewal
-
-Some services require a limit on certificate validity. Chrome and Safari usually limit this to about 365 days, Letsencrypt
-certs are valid for and renew per month.
 
 ### Server Certificates
 
