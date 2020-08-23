@@ -19,4 +19,4 @@
     marker_begin: BEGIN root_ca_private_key
     marker_end: END root_ca_private_key
     block: "{{ root_ca_private_key.stdout }}"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK root_ca_private_key"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
