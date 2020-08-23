@@ -13,6 +13,20 @@
   include: "private_key.yml"
   when: root_ca_private_key is not defined
 
+- name: Check private key is available in local file system, if not we can pull from vault
+  stat:
+    path: "{{ root_ca_private_key_path }}"
+  register: stat_result
+
+- debug:
+    msg: "{{ root_ca_private_key }}"
+
+- name: Export private key from ansible fault to local file system
+  copy:
+    dest: "{{ root_ca_private_key_path }}"
+    content: "{{ root_ca_private_key }}"
+  when: not stat_result.stat.exists
+
 - name: Make sure we have a private key and it's checked into the Ansible Vault.
   include: "certificate.yml"
   when: root_ca_cert is not defined

@@ -11,12 +11,12 @@
     ansible-vault encrypt_string
     --vault-password-file {{ ansible_vault_key_file }} --name root_ca_private_key
      "{{ lookup('file', root_ca_private_key_path) }}"
-  register: root_ca_private_key
+  register: root_ca_private_key_vault_var
 
 - name: Add root CA to vault if not found.
   blockinfile:
     path: vars_vault.yml
     marker_begin: BEGIN root_ca_private_key
     marker_end: END root_ca_private_key
-    block: "{{ root_ca_private_key.stdout }}"
+    block: "{{ root_ca_private_key_vault_var.stdout }}"
     marker: "# {mark} ANSIBLE MANAGED BLOCK"

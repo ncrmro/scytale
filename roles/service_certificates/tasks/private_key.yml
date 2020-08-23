@@ -3,8 +3,6 @@
     path: "{{ service_private_key_path }}"
     type: RSA
     size: 4096
-    passphrase: "{{ root_ca_private_key_password }}"
-    cipher: auto
 
 - name: Encrypt CA files
   command: >
