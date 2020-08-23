@@ -1,2 +1,9 @@
+- name: Create certificate directory
+  file:
+    path: certs
+    state: directory
+  register: certs_dir
+
 - name: Make sure we have a private key and it's checked into the Ansible Vault.
   include: "private_key.yml"
+  when: root_ca_private_key is not defined

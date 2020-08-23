@@ -1,2 +1,23 @@
-- debug:
-    msg: "Hello World"
+- set_fact:
+    root_ca_private_key_path: "certs/{{ root_ca_common_name }}_ca.key"
+
+- name: Generate a OpenSSL private key for the Certificate Authority
+  openssl_privatekey:
+    path: "{{ root_ca_private_key_path }}"
+    type: RSA
+    size: 4096
+    passphrase: "{{ root_ca_private_key_password }}"
+    cipher: auto
+
+- name: Encrypt CA files
+  command: >
+    ansible-vault encrypt_string
+    --vault-password-file {{ ansible_vault_key_file }} --name root_ca_private_key
+     "{{ lookup('file', root_ca_private_key_path) }}"
+  register: root_ca_private_key
+
+- name: Add root CA to vault if not found.
+  blockinfile:
+    path: vars_vault.yml
+    block: "{{ root_ca_private_key.stdout }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK root_ca_private_key"
