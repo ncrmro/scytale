@@ -1,1 +1,7 @@
 ansible_vault_key_file: ~/.ansible/vault/default_key.txt
+
+service_certificates:
+  - name: postgres
+    host: mimas
+  - name: traefik
+    host: mimas

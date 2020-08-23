@@ -1,0 +1,22 @@
+- name: Generate a OpenSSL private key for the Certificate Authority
+  openssl_privatekey:
+    path: "{{ service_private_key_path }}"
+    type: RSA
+    size: 4096
+    passphrase: "{{ root_ca_private_key_password }}"
+    cipher: auto
+
+- name: Encrypt CA files
+  command: >
+    ansible-vault encrypt_string
+    --vault-password-file {{ ansible_vault_key_file }} --name {{ service_var_private_key }}
+     "{{ lookup('file', service_private_key_path) }}"
+  register: service_private_key
+
+- name: Add root CA to vault if not found.
+  blockinfile:
+    path: vars_vault.yml
+    marker_begin: "BEGIN {{ service_var_private_key }}"
+    marker_end: "END {{ service_var_private_key }}"
+    block: "{{ service_private_key.stdout }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"

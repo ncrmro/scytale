@@ -1,0 +1,24 @@
+- debug:
+    msg: "{{ item }}"
+
+- set_fact:
+    service_cert_dir: "certs/{{ item.host }}/{{ item.name }}"
+
+- name: Create Service  certificate directory
+  file:
+    path: "{{ service_cert_dir }}"
+    state: directory
+  register: certs_dir
+
+- set_fact:
+    service_private_key_path: "{{ service_cert_dir }}/{{ item.name }}_ca.key"
+    service_csr_path: "{{ service_cert_dir }}/{{ item.name }}_ca.csr"
+    service_cert_path: "{{ service_cert_dir }}/{{ item.name }}_ca.crt"
+    service_var_base: "{{item.host}}_{{item.name}}"
+
+- set_fact:
+    service_var_private_key: "{{service_var_base}}_key"
+
+- name: Make sure we have a private key and it's checked into the Ansible Vault.
+  include: "private_key.yml"
+  when: lookup('vars', service_var_private_key, default='') == ''

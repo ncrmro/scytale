@@ -5,3 +5,8 @@
     - vars_vault.yml
   roles:
     - certificate_authority
+  tasks:
+    - name: Generate Certificates for all Host Services
+      include_role:
+        name: service_certificates
+      with_items: "{{ service_certificates }}"
