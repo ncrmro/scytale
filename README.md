@@ -8,6 +8,7 @@
 ## Docs Table of Contents
 
 - [Why](#why)
+- [PKI Basic](#pki-basics)
 - [Getting Started](#getting-started)
 - [Architecture](#getting-started)
 - [Renewal/Deployment](#renewal-and-deployment)
@@ -28,6 +29,11 @@ generating and deploying certificates to it's own repo. This has the benefit of 
 
 Finally this repo should act as a compendium to basic [public key infrastructure](https://en.wikipedia.org/wiki/Public_key_infrastructure) (PKI)
 setup for intranet infrastructure.
+
+## PKI Basics
+
+Both the server and client certificates are signed by our Root CA. The Root CA certificate is installed on
+both the client and server thus they can each validate each other against the Root CA.
 
 ## Getting Started
 
