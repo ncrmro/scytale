@@ -1,6 +1,3 @@
-- set_fact:
-    root_ca_private_key_path: "certs/{{ root_ca_common_name }}_ca.key"
-
 - name: Generate a OpenSSL private key for the Certificate Authority
   openssl_privatekey:
     path: "{{ root_ca_private_key_path }}"

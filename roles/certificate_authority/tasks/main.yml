@@ -4,6 +4,15 @@
     state: directory
   register: certs_dir
 
+- set_fact:
+    root_ca_private_key_path: "certs/{{ root_ca_common_name }}_ca.key"
+    root_ca_csr_path: "certs/{{ root_ca_common_name }}_ca.csr"
+    root_ca_cert_path: "certs/{{ root_ca_common_name }}_ca.crt"
+
 - name: Make sure we have a private key and it's checked into the Ansible Vault.
   include: "private_key.yml"
   when: root_ca_private_key is not defined
+
+- name: Make sure we have a private key and it's checked into the Ansible Vault.
+  include: "certificate.yml"
+#  when: root_ca_private_key is not defined

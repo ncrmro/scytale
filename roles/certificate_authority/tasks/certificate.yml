@@ -1,0 +1,16 @@
+- name: "Generate the CSR file signed with the private key"
+  openssl_csr:
+    path: "{{ root_ca_csr_path }}"
+    privatekey_path: "{{ root_ca_private_key_path }}"
+    privatekey_passphrase: "{{ root_ca_private_key_password }}"
+    common_name: "{{ root_ca_common_name }}"
+    basic_constraints: "CA:TRUE,pathlen:0"
+    key_usage: "keyCertSign"
+
+- name: Generate a root certificate
+  openssl_certificate:
+    path: "{{ root_ca_cert_path }}"
+    privatekey_path: "{{ root_ca_private_key_path }}"
+    privatekey_passphrase: "{{ root_ca_private_key_password }}"
+    csr_path: "{{ root_ca_csr_path }}"
+    provider: selfsigned
