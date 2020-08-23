@@ -1,9 +1,22 @@
-## Name
+# Scytale
 
 > In cryptography, a scytale, is a tool used to perform a transposition cipher, consisting of a cylinder with a strip of parchment
 > wound around it on which is written a message. The ancient Greeks, and the Spartans in particular, are said to have used this cipher to communicate during military campaigns.
 >
 > [Wikipedia](https://en.wikipedia.org/wiki/Scytale)
+
+## Docs Table of Contents
+
+- [Why](#why)
+- [Getting Started](#getting-started)
+- [Architecture](#getting-started)
+- [Renewal/Deployment](#renewal-and-deployment)
+- [Keys](#keys)
+- Certificates
+  - [Server Certificates](#server-certificates)
+  - [Client Authentication Certificates](#client-authentication-certificates)
+- [Certificate Signing Request](#certificate-signing-request)
+- [Further Reading](#further-reading-and-reference)
 
 ## Why
 
@@ -16,6 +29,29 @@ generating and deploying certificates to it's own repo. This has the benefit of 
 Finally this repo should act as a compendium to basic [public key infrastructure](https://en.wikipedia.org/wiki/Public_key_infrastructure) (PKI)
 setup for intranet infrastructure.
 
+## Getting Started
+
+```bash
+pip install ansible==2.9.10
+
+# If you already have a Ansible Vault Key set its path in vars.yml otherwise
+echo random_password > ~/.ansible/vault/default_key.txt
+```
+
+Configure `vars.yml` or if testing the project out leave defaults.
+
+To run the ansible play just run
+
+```bash
+sh ./main.sh
+```
+
+This calls
+
+```bash
+ansible-playbook --vault-password-file ~/.ansible/vault/default_key.txt -i hosts main.yml
+```
+
 ## Project Architecture
 
 This project is separated into a few different plays as we need to generate private keys and then ensure they are saved
@@ -26,7 +62,7 @@ to the vault making sure they are available for later plays from the vault and n
 
 What typically should happen is any downstream services should b
 
-### Renewal/Deployment of new certificates and keys.
+### Renewal and Deployment
 
 Some services require a limit on certificate validity. Chrome and Safari usually limit this to about 365 days, Letsencrypt
 certs are valid for and renew per month.
