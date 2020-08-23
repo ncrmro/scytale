@@ -6,7 +6,11 @@
   roles:
     - certificate_authority
   tasks:
-    - name: Generate Certificates for all Host Services
+    - name: Generate Private Keys and Certificates for all Host Services
       include_role:
         name: service_certificates
       with_items: "{{ service_certificates }}"
+    - name: Generate Private Keys and Certificates for all Client Services
+      include_role:
+        name: client_certificates
+      with_items: "{{ client_certificates }}"

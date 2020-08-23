@@ -1,0 +1,40 @@
+- debug:
+    msg: "{{ item }}"
+
+- set_fact:
+    clients_cert_dir: "certs/clients/{{ item.name }}"
+
+- name: Create Service  certificate directory
+  file:
+    path: "{{ clients_cert_dir }}"
+    state: directory
+  register: certs_dir
+
+- set_fact:
+    client_private_key_path: "{{ clients_cert_dir }}/{{ item.name }}.key"
+    client_csr_path: "{{ clients_cert_dir }}/{{ item.name }}.csr"
+    client_cert_path: "{{ clients_cert_dir }}/{{ item.name }}.crt"
+    client_var_base: "{{item.name}}"
+
+- set_fact:
+    client_var_private_key: "{{client_var_base}}_key"
+    client_var_cert: "{{client_var_base}}_cert"
+
+- name: Make sure we have a private key and it's checked into the Ansible Vault.
+  include: "private_key.yml"
+  when: lookup('vars', client_var_private_key, default='') == ''
+
+- name: Check private key is available in local file system, if not we can pull from vault
+  stat:
+    path: "{{ client_private_key_path }}"
+  register: stat_result
+
+- name: Export private key from ansible fault to local file system
+  copy:
+    dest: "{{ client_private_key_path }}"
+    content: "{{ lookup('vars', client_var_private_key) }}"
+  when: not stat_result.stat.exists
+
+- name: Generate a new certificate.
+  include: "certificate.yml"
+  when: lookup('vars', client_var_cert, default='') == ''

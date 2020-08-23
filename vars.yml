@@ -1,7 +1,15 @@
 ansible_vault_key_file: ~/.ansible/vault/default_key.txt
 
+# TODO replace host with common name
+
 service_certificates:
   - name: postgres
     host: mimas
+    subject_alt_name: "DNS:postgres.scytale.wg,IP:192.168.122.45"
   - name: traefik
     host: mimas
+    subject_alt_name: "DNS:traefik.mimas.wg,IP:192.168.122.45"
+
+client_certificates:
+  - name: user_1
+  - name: user_2

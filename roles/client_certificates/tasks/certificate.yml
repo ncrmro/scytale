@@ -1,0 +1,35 @@
+- name: "Generate the CSR file signed with the private key"
+  openssl_csr:
+    path: "{{ client_csr_path }}"
+    privatekey_path: "{{ client_private_key_path }}"
+    common_name: "{{ item.common_name | default(omit) }}"
+    subject_alt_name: "{{ item.subject_alt_name | default(omit) }}"
+    key_usage: "{{ item.key_usage | default(omit)  }}"
+    extendedKeyUsage: "{{ item.extendedKeyUsage | default(omit)  }}"
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: "{{ client_csr_path }}"
+    privatekey_path: "{{ client_private_key_path }}"
+    csr_path: "{{ client_csr_path }}"
+    provider: ownca
+    ownca_path: "{{ root_ca_cert_path }}"
+    ownca_privatekey_path: "{{ root_ca_private_key_path }}"
+    ownca_privatekey_passphrase: "{{ root_ca_private_key_password }}"
+    # note chrome won't trust certs longer than 39 months
+    ownca_not_after: "+366d"
+
+#- name: Encrypt CA Certificate
+#  command: >
+#    ansible-vault encrypt_string
+#    --vault-password-file {{ ansible_vault_key_file }} --name "{{ client_var_cert }}"
+#     "{{ lookup('file', client_cert_path) }}"
+#  register: client_ca_cert
+#
+#- name: Add root CA certificate vault if not found.
+#  blockinfile:
+#    path: vars_vault.yml
+#    marker_begin: "BEGIN {{ client_var_cert }}"
+#    marker_end: "END {{ client_var_cert }}"
+#    block: "{{ client_ca_cert.stdout }}"
+#    marker: "# {mark} ANSIBLE MANAGED BLOCK root_ca_cert"
