@@ -14,3 +14,19 @@
     privatekey_passphrase: "{{ root_ca_private_key_password }}"
     csr_path: "{{ root_ca_csr_path }}"
     provider: selfsigned
+    selfsigned_not_after: "+3650d"
+
+- name: Encrypt CA Certificate
+  command: >
+    ansible-vault encrypt_string
+    --vault-password-file {{ ansible_vault_key_file }} --name root_ca_cert
+     "{{ lookup('file', root_ca_cert_path) }}"
+  register: root_ca_cert
+
+- name: Add root CA certificate vault if not found.
+  blockinfile:
+    path: vars_vault.yml
+    marker_begin: BEGIN root_ca_cert
+    marker_end: END root_ca_cert
+    block: "{{ root_ca_cert.stdout }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK root_ca_cert"

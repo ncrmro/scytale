@@ -15,4 +15,4 @@
 
 - name: Make sure we have a private key and it's checked into the Ansible Vault.
   include: "certificate.yml"
-#  when: root_ca_private_key is not defined
+  when: root_ca_cert is not defined
