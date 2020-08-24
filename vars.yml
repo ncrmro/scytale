@@ -1,5 +1,14 @@
 ansible_vault_key_file: ~/.ansible/vault/default_key.txt
 
+root_ca_common_name: scytale
+root_ca_private_key_password: scytale
+root_ca_country_name: "US"
+root_ca_state_or_province_name: "TX"
+root_ca_email_address: "noreply@ncrmro.com"
+root_ca_organization_name: "ncrmro"
+root_ca_organizational_unit_name: "ncrmro"
+
+
 # TODO replace host with common name
 
 service_certificates:
