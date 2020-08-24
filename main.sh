@@ -2,4 +2,4 @@
 
 source venv/bin/activate
 
-ansible-playbook --vault-password-file ~/.ansible/vault/default_key.txt -i hosts main.yml
+ansible-playbook --vault-password-file ~/.ansible/vault/default_key.txt -i hosts.yml main.yml
