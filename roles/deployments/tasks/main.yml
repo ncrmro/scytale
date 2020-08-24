@@ -1,0 +1,7 @@
+- name: Copy certificate and keys to remote hosts
+  include: "item.yml"
+  with_items: "{{ deployments }}"
+
+- name: Notify any services to restart
+  debug:
+    msg: "TODO"

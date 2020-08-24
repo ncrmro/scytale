@@ -1,0 +1,7 @@
+- name: Copy file with owner and permissions
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('wheel') }}"
+    mode: "{{ item.mode | default('0600') }}"

@@ -8,3 +8,10 @@
     - service_certificates
     - client_certificates
 
+- name: Deploy generate keys and certificates
+  hosts: deployment_targets
+  vars_files:
+    - vars.yml
+    - vars_vault.yml
+  roles:
+    - deployments
