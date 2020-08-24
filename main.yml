@@ -5,12 +5,6 @@
     - vars_vault.yml
   roles:
     - certificate_authority
-  tasks:
-    - name: Generate Private Keys and Certificates for all Host Services
-      include_role:
-        name: service_certificates
-      with_items: "{{ service_certificates }}"
-    - name: Generate Private Keys and Certificates for all Client Services
-      include_role:
-        name: client_certificates
-      with_items: "{{ client_certificates }}"
+    - service_certificates
+    - client_certificates
+

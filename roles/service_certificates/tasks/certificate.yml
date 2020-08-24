@@ -20,6 +20,10 @@
     # note chrome won't trust certs longer than 39 months
     ownca_not_after: "+366d"
 
+- name: Remove file (delete file)
+  file:
+    path: "{{ service_csr_path }}"
+    state: absent
 #- name: Encrypt CA Certificate
 #  command: >
 #    ansible-vault encrypt_string

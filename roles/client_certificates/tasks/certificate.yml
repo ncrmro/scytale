@@ -18,7 +18,6 @@
     ownca_privatekey_passphrase: "{{ root_ca_private_key_password }}"
     # note chrome won't trust certs longer than 39 months
     ownca_not_after: "+366d"
-
 #- name: Encrypt CA Certificate
 #  command: >
 #    ansible-vault encrypt_string
