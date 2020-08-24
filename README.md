@@ -48,6 +48,8 @@ Configure `vars.yml` or if testing the project out leave defaults.
 
 To run the ansible play just run
 
+**NOTE currently first pass will fail but add the private key to the vault, subsiquent runs should have not problem, will fix soon
+
 ```bash
 sh ./main.sh
 ```
