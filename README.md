@@ -46,6 +46,8 @@ echo random_password > ~/.ansible/vault/default_key.txt
 
 Configure `vars.yml` or if testing the project out leave defaults.
 
+You can also set certificate deployments in th `hosts.yml` file.
+
 To run the ansible play just run
 
 **NOTE currently first pass will fail but add the private key to the vault, subsiquent runs should have not problem, will fix soon
@@ -101,7 +103,7 @@ Examples include
   - [Nginx]()
   - [Traefik](https://docs.traefik.io/https/tls/)
 - Databases
-  - [Postgres](https://www.postgresql.org/docs/9.0/libpq-ssl.html)
+  - [Postgres](https://www.postgresql.org/docs/9.0/ssl-tcp.html)
 - Message Queues
   - [Rabbit MQ](https://www.rabbitmq.com/ssl.html)
 - Email server
@@ -111,6 +113,7 @@ Examples include
 These certificates ensure only approved clients can connect to your services.
 
 - [Docker](https://docs.docker.com/engine/security/certificates/)
+- [Postgres](https://www.postgresql.org/docs/9.0/libpq-ssl.html
 
 ## Certificate Signing Request
 
