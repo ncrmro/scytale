@@ -24,17 +24,18 @@
   file:
     path: "{{ service_csr_path }}"
     state: absent
-#- name: Encrypt CA Certificate
-#  command: >
-#    ansible-vault encrypt_string
-#    --vault-password-file {{ ansible_vault_key_file }} --name "{{ service_var_cert }}"
-#     "{{ lookup('file', service_cert_path) }}"
-#  register: root_ca_cert
-#
-#- name: Add root CA certificate vault if not found.
-#  blockinfile:
-#    path: vars_vault.yml
-#    marker_begin: BEGIN root_ca_cert
-#    marker_end: END root_ca_cert
-#    block: "{{ root_ca_cert.stdout }}"
-#    marker: "# {mark} ANSIBLE MANAGED BLOCK root_ca_cert"
+
+- name: Encrypt CA Certificate
+  command: >
+    ansible-vault encrypt_string
+    --vault-password-file {{ ansible_vault_key_file }} --name "{{ service_var_cert }}"
+     "{{ lookup('file', service_cert_path) }}"
+  register: service_cert
+
+- name: Add service certificate to vault
+  blockinfile:
+    path: vars_vault.yml
+    marker_begin: "BEGIN {{ service_var_cert }}"
+    marker_end: "END {{ service_var_cert }}"
+    block: "{{ service_cert.stdout }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"

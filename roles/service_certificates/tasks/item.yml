@@ -38,8 +38,33 @@
 
 ####
 # Certificate
-- name: Generate a new certificate.
+- name: Export Certificate from ansible vault to local file system
+  copy:
+    dest: "{{ service_cert_path }}"
+    content: "{{ lookup('vars', service_var_cert) }}"
+  when: not lookup('vars', service_var_cert, default='') == ''
+
+- name: Check if certificate is available
+  stat:
+    path: "{{ service_cert_path }}"
+  register: cert_stat_result
+
+- openssl_certificate_info:
+    path: "{{ service_cert_path }}"
+    # for valid_at, invalid_at and valid_in
+    valid_at:
+      thirty_days: "+30d"
+      one_year: "+365d"
+      ten_years: "+3650d"
+  register: result
+  when: cert_stat_result.stat.exists
+
+- set_fact:
+    cert_not_available: "{{ 'skipped' in result and result.skipped }}"
+    cert_expiring_soon: "{{ 'valid_at' in result and not result.valid_at.thirty_days  }}"
+
+- name: Generate a new certificate when cert not available or expiring soon.
   include: "certificate.yml"
-  when: lookup('vars', service_var_cert, default='') == ''
+  when: cert_not_available or cert_expiring_soon
 # End Certificate
 ####

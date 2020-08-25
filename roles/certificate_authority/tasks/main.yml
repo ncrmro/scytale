@@ -9,6 +9,8 @@
     root_ca_csr_path: "certs/{{ root_ca_common_name }}_ca.csr"
     root_ca_cert_path: "certs/{{ root_ca_common_name }}_ca.crt"
 
+#####
+# Private key
 - name: Make sure we have a private key and it's checked into the Ansible Vault.
   include: "private_key.yml"
   when: root_ca_private_key is not defined
@@ -18,15 +20,44 @@
     path: "{{ root_ca_private_key_path }}"
   register: stat_result
 
-- debug:
-    msg: "{{ root_ca_private_key }}"
-
 - name: Export private key from ansible fault to local file system
   copy:
     dest: "{{ root_ca_private_key_path }}"
     content: "{{ root_ca_private_key }}"
   when: not stat_result.stat.exists
+# END Private Key
+#######
 
-- name: Make sure we have a private key and it's checked into the Ansible Vault.
+
+####
+# Certificate
+- name: Export Certificate from ansible vault to local file system
+  copy:
+    dest: "{{ root_ca_cert_path }}"
+    content: "{{ lookup('vars', root_ca_certificate) }}"
+  when: root_ca_certificate is defined
+
+- name: Check if certificate is available
+  stat:
+    path: "{{ root_ca_cert_path }}"
+  register: cert_stat_result
+
+- openssl_certificate_info:
+    path: "{{ root_ca_cert_path }}"
+    # for valid_at, invalid_at and valid_in
+    valid_at:
+      thirty_days: "+30d"
+      one_year: "+365d"
+      ten_years: "+3650d"
+  register: result
+  when: cert_stat_result.stat.exists
+
+- set_fact:
+    cert_not_available: "{{ 'skipped' in result and result.skipped }}"
+    cert_expiring_soon: "{{ 'valid_at' in result and not result.valid_at.thirty_days  }}"
+
+- name: Generate a new certificate when cert not available or expiring soon.
   include: "certificate.yml"
-  when: root_ca_cert is not defined
+  when: cert_not_available or cert_expiring_soon
+# End Certificate
+####
