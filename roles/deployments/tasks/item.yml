@@ -1,3 +1,8 @@
+- name: Make sure destination directory exists
+  file:
+    path: "{{ item.dest }}"
+    state: directory
+
 - name: Copy file with owner and permissions
   copy:
     src: "{{ item.src }}"
@@ -5,3 +10,13 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('wheel') }}"
     mode: "{{ item.mode | default('0600') }}"
+
+- name: Create a systemlink if defined
+  file:
+    src: "{{ item.dest }}/{{  item.src.split('/')[-1] }}"
+    dest: "{{ item.symbolic_link }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('wheel') }}"
+    mode: "{{ item.mode | default('0600') }}"
+    state: link
+  when: item.symbolic_link is defined
