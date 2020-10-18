@@ -14,10 +14,14 @@ root_ca_organizational_unit_name: "ncrmro"
 service_certificates:
   - name: postgres.scytale.wg
     host: scytale.wg
-    subject_alt_name: "DNS:postgres.scytale.wg,IP:192.168.122.45"
+    subject_alt_name:
+    - IP:192.168.122.45
+    - DNS:postgres.scytale.wg
   - name: traefik.scytale.wg
     host: scytale.wg
-    subject_alt_name: "DNS:traefik.scytale.wg,IP:192.168.122.45"
+    subject_alt_name:
+    - IP:192.168.122.45
+    - DNS:traefik.scytale.wg
 
 client_certificates:
   - name: user_1

@@ -4,7 +4,7 @@
     privatekey_path: "{{ service_private_key_path }}"
     common_name: "{{ root_ca_common_name }}"
     basic_constraints: "CA:FALSE"
-    subject_alt_name: "{{ item.subject_alt_name   }}"
+    subject_alt_name: "{{ item.subject_alt_name | join(',')  }}"
     key_usage: "{{ item.key_usage | default(omit)  }}"
     extendedKeyUsage: "{{ item.extendedKeyUsage | default(omit)  }}"
 
